@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * Keyboard Driver for Blackberry Keyboards BBQ10 from arturo182. Software written by wallComputer.
+ * Convert Pimoroni Trackball in to a mouse. Software written by wallComputer. 
  * debug_levels.h: Describes the debug levels that can be set for viewing code flow in dmesg.
  * Use dmesg -wH | grep bbqX0 for easy viewing.
  */

@@ -51,7 +51,7 @@ MODULE_VERSION("0.1");
 #define PTMOUSE_ORIENTATION_180						2		// Rotated 180 degress clockwise.
 #define PTMOUSE_ORIENTATION_270						3		// Rotated 270 degress clockwise.
 #define PTMOUSE_DEFAULT_ORIENTATION					PTMOUSE_ORIENTATION_270		// Defualt to be used with Pimoroni Display Hat Mini and OmnigrammerV4.
-#define PTMOUSE_DEFAULE_SCALE_FACTOR				100
+#define PTMOUSE_DEFAULT_SCALE_FACTOR				100
 
 #define PTMOUSE_DEFUALT_LEFT_POS					0
 #define PTMOUSE_DEFUALT_RIGHT_POS					1

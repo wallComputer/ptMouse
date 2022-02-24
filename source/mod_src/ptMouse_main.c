@@ -19,16 +19,16 @@ module_param(work_rate_ms, int, 0);
 static int orientation = PTMOUSE_DEFAULT_ORIENTATION;
 module_param(orientation, int, 0);
 
-static int up_scale = PTMOUSE_DEFAULE_SCALE_FACTOR;
+static int up_scale = PTMOUSE_DEFAULT_SCALE_FACTOR;
 module_param(up_scale, int, 0);
 
-static int down_scale = PTMOUSE_DEFAULE_SCALE_FACTOR;
+static int down_scale = PTMOUSE_DEFAULT_SCALE_FACTOR;
 module_param(down_scale, int, 0);
 
-static int left_scale = PTMOUSE_DEFAULE_SCALE_FACTOR;
+static int left_scale = PTMOUSE_DEFAULT_SCALE_FACTOR;
 module_param(left_scale, int, 0);
 
-static int right_scale = PTMOUSE_DEFAULE_SCALE_FACTOR;
+static int right_scale = PTMOUSE_DEFAULT_SCALE_FACTOR;
 module_param(right_scale, int, 0);
 
 static atomic_t keepWorking = ATOMIC_INIT(1);
@@ -78,11 +78,11 @@ static void ptMouse_work_handler(struct work_struct *work_struct)
 													u8X5Values[PTMOUSE_DEFUALT_BTN_POS]);
 #endif
 		if (ptMouse_data->swap) {
-			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->left_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->right_scale)/PTMOUSE_DEFAULE_SCALE_FACTOR;
-			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULE_SCALE_FACTOR;
+			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->left_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->right_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
+			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
 		} else {
-			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->right_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->left_scale)/PTMOUSE_DEFAULE_SCALE_FACTOR;
-			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULE_SCALE_FACTOR;
+			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->right_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->left_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
+			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
 		}
 		currentButtonState = u8X5Values[PTMOUSE_DEFUALT_BTN_POS]>>7; // Use only the Button state of pressed or released.
 		if (currentButtonState ^ ptMouse_data->lastButtonState)
