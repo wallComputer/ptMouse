@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: GPL-2.0
+/dts-v1/;
+/plugin/;
+
+/{
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&i2c1>;
+
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			ptMouse: ptMouse@a {
+				compatible = "wallComputer,ptMouse";
+				reg = <0x0A>;
+			};
+		};
+	};
+};
+
