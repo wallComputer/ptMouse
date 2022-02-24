@@ -144,7 +144,7 @@ Pull requests are welcome.
 
 ## Special thanks
  - [Pimoroni](https://shop.pimoroni.com) & [Gadgetoid](https://github.com/Gadgetoid) for the amazing product and python libraries. Please buy more of their new awesome stuff and join their discord for amazing upcoming stuff.
- - [juj's](https://github.com/juj) `frcp-ili9341` project for making small size screens so easy to use! 
+ - [juj's](https://github.com/juj) `fbcp-ili9341` project for making small size screens so easy to use! 
 
 
 ## License
