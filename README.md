@@ -16,19 +16,20 @@ The original [source code](https://github.com/pimoroni/trackball-python) by [Pim
 
 ## Trackball Layout & Orientation
 
-The trackball layout is shown below. This is the orientation Pimoroni uses to mention up, down, left, and right on the trackball.
+The trackball layout is shown below. This is the orientation Pimoroni uses to mention up, down, left, and right on the trackball. 
+
 
 ```
- *		Trackball Layout
+ *	  Pimoroni Trackball Layout
  *	+---------------------------+
- *	|		+-----------+		|
- *	|		|			|		|
- *	|		|  BTN_LEFT	|		|
- *	|		|			|		|
- *	|		+-----------+		|
- *	|							|
- *	+------+			 +------+
- *		   |			 |
+ *	|       +-----------+       |
+ *	|       |			|       |
+ *	|       |  BTN_LEFT	|       |
+ *	|       |			|       |
+ *	|       +-----------+       |
+ *	|                           |
+ *	+------+             +------+
+ *		   |             |
  *		   |3V3|D|C|I|GND|
  *		   |_____________|
 ```
@@ -84,7 +85,7 @@ $ 0xC0
   0. Hardware connections
 	 Mate the display as a hat for the Pi.
 
-	 Add the Trackball to the left hand side Breakout Extender.
+	 Add the Trackball to the left hand side Breakout Extender. One can also use the Qwiic connector at the screen's bottom.
 
   1. Install git and cmake.
      ```bash
