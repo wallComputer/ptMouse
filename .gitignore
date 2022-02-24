@@ -1,0 +1,12 @@
+.vscode/*
+*.vscode-ctags
+*.json
+*.ko
+*.dtbo
+*.symvers
+*.mod
+*.mod.c
+*.mod.o
+*.o
+*.cmd
+*.order
