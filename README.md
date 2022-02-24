@@ -23,15 +23,15 @@ The trackball layout is shown below. This is the orientation Pimoroni uses to me
  *	  Pimoroni Trackball Layout
  *	+---------------------------+
  *	|       +-----------+       |
- *	|       |			|       |
- *	|       |  BTN_LEFT	|       |
- *	|       |			|       |
+ *	|       |           |       |
+ *	|       |  BTN_LEFT |       |
+ *	|       |           |       |
  *	|       +-----------+       |
  *	|                           |
  *	+------+             +------+
- *		   |             |
- *		   |3V3|D|C|I|GND|
- *		   |_____________|
+ *         |             |
+ *         |3V3|D|C|I|GND|
+ *         |_____________|
 ```
 
 
