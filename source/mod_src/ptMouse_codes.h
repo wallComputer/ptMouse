@@ -10,11 +10,11 @@
 #include <linux/input.h>
 
 /*
- *		Button Layout
+ *		Trackball Layout
  *	+---------------------------+
  *	|		+-----------+		|
  *	|		|			|		|
- *	|		|  BTN_LFT	|		|
+ *	|		|  BTN_LEFT	|		|
  *	|		|			|		|
  *	|		+-----------+		|
  *	|							|
