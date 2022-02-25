@@ -9,8 +9,8 @@ The original [source code](https://github.com/pimoroni/trackball-python) by [Pim
 
 - Ability to use trackball as a mouse device.
 - Ability to use trackball button as customizable input key.
-- Ability to orient the trackball in 4 different orientations.
-- Ability to control gain/scaling of each of the four directions, up, down, left, and right, independent of the orientation of the trackball.**
+- Ability to orient the trackball in 4 different orientations and flip X and Y axes of motion.
+- Ability to control gain/scaling of each of the four directions, up, down, left, and right, independent of the orientation of the trackball.
 - Ability to change Button Keycode for the Button on the trackpad.
 
 
@@ -20,18 +20,21 @@ The trackball layout is shown below. This is the orientation Pimoroni uses to me
 
 
 ```
+/*
  *	  Pimoroni Trackball Layout
  *  +---------------------------+
+ *  |            ↑UP↑           |
  *  |       +-----------+       |
  *  |       |           |       |
- *  |       |  BTN_LEFT |       |
+ *  |←LEFT← |  BTN_LEFT |→RIGHT→|
  *  |       |           |       |
  *  |       +-----------+       |
- *  |                           |
+ *  |           ↓DOWN↓          |
  *  +------+             +------+
  *         |             |
  *         |3V3|D|C|I|GND|
  *         |_____________|
+ */
 ```
 
 
@@ -125,7 +128,8 @@ $ 0xC0
 	
 All the below customisations make use of module parameters, none of which can be edited without unloading and loading the driver back. This was a design choice, I do not like making the user go to root and change anything on a computer. Hence to make these changes, one can edit the `installer.sh` and change the module parameters.
  - For changing the Orientation, one can use the `orientation` module parameter. The range of values this parameter takes is 0,1,2, and 3. 0 signifies the orientation as shown above, while each next number rotates the trackball 90 degrees clockwise. To be used with Display Hat mini, one can see it requires orientation of 270 degrees, and hence the `installer.sh` sets the orientation to `3`.
- - For changing the gain/scales of the cursor motion, one can use the `up_scale`, `down_scale`, `left_scale`, `right_scale` module parameters. These parameters are aligned to the axis of a display, that is, top left corner is the origin to the screen, left to right is increasing X axis, and top to bottom is increasing Y axis. So increasing `up_scale`, will make rolling the trackball (in correct orientation) in the upward direction quicker. The scales are themselves stretched from `100`. This way, to decrease the quickness of cursor motion in one direction, you can reduce the `_scale` of that direction below `100`. For the Display Hat Mini, from personal use it was found a `500` scale for up and down directions and a `1000` scale for left and right directions was useful.
+ - For changing the gain/scales of the cursor motion, one can use the `up_scale`, `down_scale`, `left_scale`, `right_scale` module parameters. These parameters are aligned to the axis of a display, that is, top left corner is the origin to the screen, left to right is increasing X axis, and top to bottom is increasing Y axis. So increasing `up_scale`, will make rolling the trackball (in correct orientation) in the upward direction quicker. The scales are themselves stretched from `100`. This way, to decrease the quickness of cursor motion in one direction, you can reduce the `_scale` of that direction below `100`. For the Display Hat Mini, from personal use it was found a `200` scale for up and down directions and a `300` scale for left and right directions was useful. 
+ - For changing direction of axes, one can use the `flip_X` and `flip_Y`. As mentioned above, X axis goes from left to right of the screen, and Y axis goes from top to bottom. Using the `flip_` parameters causes rolling the trackball in one direction move the cursor in opposite direction. The `_scale` parameters are preserved though, thus one can use the `flip_` and `_scale` parameters in conjunction and possibly make more orientations possible.
  - For changing the default button key on the trackball, use `button_keycode` module parameter. One will need to provide the appropriate scancode from [input-event-codes.h](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h) in decimal format. For example, for `BTN_LEFT` which has hexadecimal value `0x110` or decimal value `272`, use `button_keycode=272`, similarly for `BTN_RIGHT` which has hecadecimal value `0x111` or decimal value `273`, use `button_keycode=273`.
 ## Known Issues
 
