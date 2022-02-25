@@ -31,6 +31,12 @@ module_param(left_scale, int, 0);
 static int right_scale = PTMOUSE_DEFAULT_SCALE_FACTOR;
 module_param(right_scale, int, 0);
 
+static int flip_X = PTMOUSE_DEFAULT_FLIP;
+module_param(flip_X, int, 0);
+
+static int flip_Y = PTMOUSE_DEFAULT_FLIP;
+module_param(flip_Y, int, 0);
+
 static atomic_t keepWorking = ATOMIC_INIT(1);
 
 #if (DEBUG_LEVEL & DEBUG_LEVEL_FE)
@@ -78,11 +84,11 @@ static void ptMouse_work_handler(struct work_struct *work_struct)
 													u8X5Values[PTMOUSE_DEFUALT_BTN_POS]);
 #endif
 		if (ptMouse_data->swap) {
-			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->left_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->right_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
-			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
+			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->up_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->down_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
+			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->right_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->left_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
 		} else {
 			rel_X = ptMouse_data->x_sign*(u8X5Values[PTMOUSE_DEFUALT_RIGHT_POS]*ptMouse_data->right_scale - u8X5Values[PTMOUSE_DEFUALT_LEFT_POS]*ptMouse_data->left_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
-			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->down_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->up_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
+			rel_Y = ptMouse_data->y_sign*(u8X5Values[PTMOUSE_DEFUALT_UP_POS]*ptMouse_data->up_scale - u8X5Values[PTMOUSE_DEFUALT_DOWN_POS]*ptMouse_data->down_scale)/PTMOUSE_DEFAULT_SCALE_FACTOR;
 		}
 		currentButtonState = u8X5Values[PTMOUSE_DEFUALT_BTN_POS]>>7; // Use only the Button state of pressed or released.
 		if (currentButtonState ^ ptMouse_data->lastButtonState)
@@ -127,36 +133,41 @@ static void ptMouse_set_init_conditons(struct ptMouse_data *ptMouse_data)
 		ptMouse_data->orientation = orientation;
 
 	//THERE MUST BE AN ORDER TO HOW THIS IS DONE. HERE IT'S DONE EMPIRICALLY. If you are reading this and know the math behind it, make a pull request and let me know.
-	//Set values for 270 degree rotation (as used in base case of Omnigrammer.)
-	ptMouse_data->swap = 1;
-	ptMouse_data->x_sign = -1;
-	ptMouse_data->y_sign = -1;
-	ptMouse_data->up_scale = down_scale;
-	ptMouse_data->down_scale = up_scale;
-	ptMouse_data->left_scale = left_scale;
-	ptMouse_data->right_scale = right_scale;
+
+	//Set values for 0 degree rotation (as default orientation.)
+	ptMouse_data->swap = 0;
+	ptMouse_data->x_sign = (flip_X == PTMOUSE_FLIP_OFF) ? 1 : -1;
+	ptMouse_data->y_sign = (flip_Y == PTMOUSE_FLIP_OFF) ? -1 : 1;
+	ptMouse_data->up_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? up_scale : down_scale;
+	ptMouse_data->down_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? down_scale : up_scale;
+	ptMouse_data->left_scale = (flip_X == PTMOUSE_FLIP_OFF) ? left_scale : right_scale;
+	ptMouse_data->right_scale = (flip_X == PTMOUSE_FLIP_OFF) ? right_scale : left_scale;
 	ptMouse_data->lastButtonState = 0x00;
 
-	if (ptMouse_data->orientation == PTMOUSE_ORIENTATION_0) { // Same orientation as default Trackball orientation.
-		ptMouse_data->swap = 0;
-		ptMouse_data->x_sign = 1;
-		ptMouse_data->y_sign = -1;
-	} else if (ptMouse_data->orientation == PTMOUSE_ORIENTATION_90) { // 90 degrees rotated from default Trackball orientation.
+	if (ptMouse_data->orientation == PTMOUSE_ORIENTATION_90) { // 90 degrees rotated from default Trackball orientation.
 		ptMouse_data->swap = 1;
-		ptMouse_data->x_sign = 1;
-		ptMouse_data->y_sign = 1;
-		ptMouse_data->up_scale = up_scale;
-		ptMouse_data->down_scale = down_scale;
-		ptMouse_data->left_scale = right_scale;
-		ptMouse_data->right_scale = left_scale;
+		ptMouse_data->x_sign = (flip_X == PTMOUSE_FLIP_OFF) ? 1 : -1;
+		ptMouse_data->y_sign = (flip_Y == PTMOUSE_FLIP_OFF) ? 1 : -1;
+		ptMouse_data->up_scale = (flip_X == PTMOUSE_FLIP_OFF) ? right_scale : left_scale;
+		ptMouse_data->down_scale = (flip_X == PTMOUSE_FLIP_OFF) ? left_scale : right_scale;
+		ptMouse_data->left_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? up_scale : down_scale;
+		ptMouse_data->right_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? down_scale : up_scale;
 	}  else if (ptMouse_data->orientation == PTMOUSE_ORIENTATION_180) { // 180 degrees rotated from default Trackball orientation.
 		ptMouse_data->swap = 0;
-		ptMouse_data->x_sign = -1;
-		ptMouse_data->y_sign = 1;
-		ptMouse_data->up_scale = up_scale;
-		ptMouse_data->down_scale = down_scale;
-		ptMouse_data->left_scale = right_scale;
-		ptMouse_data->right_scale = left_scale;
+		ptMouse_data->x_sign = (flip_X == PTMOUSE_FLIP_OFF) ? -1 : 1;
+		ptMouse_data->y_sign = (flip_Y == PTMOUSE_FLIP_OFF) ? 1 : -1;
+		ptMouse_data->up_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? down_scale : up_scale;
+		ptMouse_data->down_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? up_scale : down_scale;
+		ptMouse_data->left_scale = (flip_X == PTMOUSE_FLIP_OFF) ? right_scale : left_scale;
+		ptMouse_data->right_scale = (flip_X == PTMOUSE_FLIP_OFF) ? left_scale : right_scale;
+	} else if (ptMouse_data->orientation == PTMOUSE_ORIENTATION_270) { // 180 degrees rotated from default Trackball orientation.
+		ptMouse_data->swap = 1;
+		ptMouse_data->x_sign = (flip_X == PTMOUSE_FLIP_OFF) ? -1 : 1;
+		ptMouse_data->y_sign = (flip_Y == PTMOUSE_FLIP_OFF) ? -1 : 1;
+		ptMouse_data->up_scale = (flip_X == PTMOUSE_FLIP_OFF) ? left_scale : right_scale;
+		ptMouse_data->down_scale = (flip_X == PTMOUSE_FLIP_OFF) ? right_scale : left_scale;
+		ptMouse_data->left_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? down_scale : up_scale;
+		ptMouse_data->right_scale = (flip_Y == PTMOUSE_FLIP_OFF) ? up_scale : down_scale;
 	}
 	ptMouse_data->red_level = PTMOUSE_DEFAULT_RED_LEVEL;
 	ptMouse_data->green_level = PTMOUSE_DEFAULT_GREEN_LEVEL;
@@ -414,6 +425,7 @@ static ssize_t ptMouse_fops_write(struct file *file, const char __user *user_buf
 			dev_err(&ptMouse_data->i2c_client->dev, "%s Could not write to PTMOUSE_RED_LED_REGISTER. Error: %d\n", __func__, returnValue);
 			return -1;
 		}
+		ptMouse_data->red_level = registerValue;
 		break;
 	case PTMOUSE_GREEN_DEVICE_MINOR_NUMBER:
 		returnValue = ptMouse_write(ptMouse_data->i2c_client, PTMOUSE_I2C_ADDRESS, PTMOUSE_GREEN_LED_REGISTER, &registerValue, sizeof(uint8_t));
@@ -421,6 +433,7 @@ static ssize_t ptMouse_fops_write(struct file *file, const char __user *user_buf
 			dev_err(&ptMouse_data->i2c_client->dev, "%s Could not write to PTMOUSE_GREEN_LED_REGISTER. Error: %d\n", __func__, returnValue);
 			return -1;
 		}
+		ptMouse_data->green_level = registerValue;
 		break;
 	case PTMOUSE_BLUE_DEVICE_MINOR_NUMBER:
 		returnValue = ptMouse_write(ptMouse_data->i2c_client, PTMOUSE_I2C_ADDRESS, PTMOUSE_BLUE_LED_REGISTER, &registerValue, sizeof(uint8_t));
@@ -428,6 +441,7 @@ static ssize_t ptMouse_fops_write(struct file *file, const char __user *user_buf
 			dev_err(&ptMouse_data->i2c_client->dev, "%s Could not write to PTMOUSE_BLUE_LED_REGISTER. Error: %d\n", __func__, returnValue);
 			return -1;
 		}
+		ptMouse_data->blue_level = registerValue;
 		break;
 	case PTMOUSE_WHITE_DEVICE_MINOR_NUMBER:
 		returnValue = ptMouse_write(ptMouse_data->i2c_client, PTMOUSE_I2C_ADDRESS, PTMOUSE_WHITE_LED_REGISTER, &registerValue, sizeof(uint8_t));
@@ -435,6 +449,7 @@ static ssize_t ptMouse_fops_write(struct file *file, const char __user *user_buf
 			dev_err(&ptMouse_data->i2c_client->dev, "%s Could not write to PTMOUSE_WHITE_LED_REGISTER. Error: %d\n", __func__, returnValue);
 			return -1;
 		}
+		ptMouse_data->white_level = registerValue;
 		break;
 	}
 

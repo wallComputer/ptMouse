@@ -52,6 +52,9 @@ MODULE_VERSION("0.1");
 #define PTMOUSE_ORIENTATION_270						3		// Rotated 270 degress clockwise.
 #define PTMOUSE_DEFAULT_ORIENTATION					PTMOUSE_ORIENTATION_270		// Defualt to be used with Pimoroni Display Hat Mini and OmnigrammerV4.
 #define PTMOUSE_DEFAULT_SCALE_FACTOR				100
+#define PTMOUSE_FLIP_ON								1
+#define PTMOUSE_FLIP_OFF							0
+#define PTMOUSE_DEFAULT_FLIP						PTMOUSE_FLIP_OFF
 
 #define PTMOUSE_DEFUALT_LEFT_POS					0
 #define PTMOUSE_DEFUALT_RIGHT_POS					1
@@ -102,10 +105,10 @@ struct ptMouse_data {
 	int8_t x_sign;
 	int8_t y_sign;
 
-	uint8_t up_scale;
-	uint8_t down_scale;
-	uint8_t left_scale;
-	uint8_t right_scale;
+	int16_t up_scale;
+	int16_t down_scale;
+	int16_t left_scale;
+	int16_t right_scale;
 
 	uint8_t lastButtonState;
 
